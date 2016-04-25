@@ -20,6 +20,10 @@ var GameArea = {
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
     this.interval = setInterval(updateGameArea, 20);
     //calling updateGameArea every 20th milsecond
+    window.addEventListener('mousemove', function (e) {
+        GameArea.x = e.pageX;
+        GameArea.y = e.pageY;
+    })
   },
   clear: function() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -51,11 +55,11 @@ function Brick(width, height, color, x, y) {
 }
 
 function updateGameArea() {
-  if (paddle.x >= 1100) {
-    paddle.x = 50;
-  }
-  paddle.x += 1;
   GameArea.clear();
+  if(GameArea.x && GameArea.y) {
+    paddle.x = GameArea.x;
+  }
+
   paddle.update();
   bricks.forEach(function(brick) { brick.update(); })
 }
