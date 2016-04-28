@@ -79,7 +79,8 @@ function Ball() {
     if(this.y + this.dy < 0) {
       this.dy = -this.dy;
     }else if((this.x > paddle.x && this.x <= paddle.x + paddle.width) && (this.y < paddle.y + paddle.height && this.y >= paddle.y - 18)) {
-        this.dy = -this.dy;
+      this.dx = 10 * ((this.x - (paddle.x + paddle.width / 2)) / paddle.width);
+      this.dy = -this.dy;
     }else if(this.y + this.dy > 700) {
       clearInterval(GameArea.interval);
       }
