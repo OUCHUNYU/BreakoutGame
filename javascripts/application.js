@@ -1,7 +1,7 @@
 var paddle;
 var ball;
 var bricks = [];
-
+var padding = 1;
 // setup all elements
 function layout() {
   GameArea.start();
@@ -10,9 +10,9 @@ function layout() {
 // Game starter
 function start() {
   paddle = new Paddle(150, 10, "black", 0, 650);
-  for (var r = 0; r < 200; r += 40) {
-    for(var c = 0; c < 1200; c += 100) {
-      bricks.push(new Brick(80, 30, "green", c + 10, r + 10));
+  for (var r = 0; r < 200; r += 31) {
+    for(var c = 0; c < 1200; c += 81) {
+      bricks.push(new Brick(80, 30, "green", c + padding, r + padding));
     }
   }
   ball = new Ball();
@@ -60,6 +60,14 @@ function Brick(width, height, color, x, y) {
   this.x = x;
   this.y = y;
   this.update = function() {
+    if (this.x < ball.x + ball.r && ball.x < (this.x + this.width) && this.y + this.height > ball.y && ball.y > this.y   ) {
+      ball.dy = -ball.dy;
+      this.width = 0;
+      this.height = 0;
+      this.x = 0;
+      this.y = 0;
+    }
+
     ctx = GameArea.context;
     ctx.fillStyle = color;
     ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -68,6 +76,7 @@ function Brick(width, height, color, x, y) {
 
 // making a ball
 function Ball() {
+  this.r = 10;
   this.dx = 3;
   this.dy = -3;
   this.x = 200;
@@ -79,7 +88,7 @@ function Ball() {
     if(this.y + this.dy < 0) {
       this.dy = -this.dy;
     }else if((this.x > paddle.x && this.x <= paddle.x + paddle.width) && (this.y < paddle.y + paddle.height && this.y >= paddle.y - 18)) {
-      this.dx = 10 * ((this.x - (paddle.x + paddle.width / 2)) / paddle.width);
+      this.dx = 8 * ((this.x - (paddle.x + paddle.width / 2)) / paddle.width);
       this.dy = -this.dy;
     }else if(this.y + this.dy > 700) {
       clearInterval(GameArea.interval);
@@ -88,7 +97,7 @@ function Ball() {
     this.y += this.dy;
     ctx = GameArea.context;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 20, 0, Math.PI*2, true);
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
     ctx.closePath();
     ctx.fillStyle = 'red';
     ctx.fill();
@@ -102,8 +111,8 @@ function updateGameArea() {
   if(GameArea.x && GameArea.y) {
     paddle.x = GameArea.x;
   }
-
   ball.update();
-  paddle.update();
   bricks.forEach(function(brick) { brick.update(); })
+
+  paddle.update();
 }
