@@ -3,18 +3,23 @@ var ball;
 var bricks = [];
 var padding = 1;
 var score;
+var colors = ["#ff0000", "#cc33ff", "#00ff99", "#004d99", "#993399", "#66ffff", "#ffff00", "#bfff00", "#008000", "#3366cc"]
 // setup all elements
+var randBig = Math.floor((Math.random() * 100) + 1);
 function layout() {
   GameArea.start();
 }
 
 // Game starter
 function start() {
-  paddle = new Paddle(150, 10, "black", 0, 650);
+  paddle = new Paddle(150, 10, "#ff0066", 0, 650);
   for (var r = 0; r < 200; r += 31) {
     for(var c = 0; c < 1200; c += 81) {
-      bricks.push(new Brick(80, 30, "green", c + padding, r + padding));
+      bricks.push(new Brick(80, 30, colors[Math.floor((Math.random()*10))], c + padding, r + padding));
     }
+  }
+  for (var counter = 0; counter < randBig; counter++) {
+    delete bricks[Math.floor((Math.random() * bricks.length) + 1)]
   }
   ball = new Ball();
   score = new Score();
@@ -110,7 +115,7 @@ Ball.prototype.update = function() {
   ctx.beginPath();
   ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
   ctx.closePath();
-  ctx.fillStyle = 'red';
+  ctx.fillStyle = '#33ffff';
   ctx.fill();
 };
 
